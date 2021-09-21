@@ -16,7 +16,13 @@ jobs:
           token: ${{ secrets.APTO_BOT_TOKEN }}
 
       - name: Set npm token
-        run: npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}" 
+        run: npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+
+      - name: Set git email
+        run: git config user.email "aptobot.fe@aptopayments.com"
+
+      - name: Set git name
+        run: git config user.name "AptoBotFe"
 
       - name: Install
         run: npm ci
