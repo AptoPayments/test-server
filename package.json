@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@apto-payments/test-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Wrapper over msw to generate stubs on jest environments",
   "main": "lib/index.js",
   "peerDependencies": {
