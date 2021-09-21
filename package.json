@@ -1,0 +1,38 @@
+{
+  "name": "@apto-payments/test-server",
+  "version": "0.0.0",
+  "description": "Wrapper over msw to generate stubs on jest environments",
+  "main": "lib/index.js",
+  "peerDependencies": {
+    "jest": "^27.2.1",
+    "msw": "^0.35.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AptoPayments/test-server.git"
+  },
+  "keywords": [
+    "jest",
+    "test",
+    "testing",
+    "test-server",
+    "stub",
+    "mock",
+    "msw",
+    "service",
+    "worker"
+  ],
+  "author": "@apto-payments",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AptoPayments/test-server/issues"
+  },
+  "homepage": "https://github.com/AptoPayments/test-server#readme"
+}
