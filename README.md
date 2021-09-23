@@ -62,13 +62,17 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { useEffect, useState } from "react";
 
 it("should stub the given server requests", async () => {
-  const spy1 = mockServer.stubJSONResponse({ data: "hello" }, 200, {
+  const spy1 = mockServer.stubJSONResponse(
     method: "get",
     path: "*/foo/bar",
+    response: { data: "hello" },
+    status: 200,
   });
-  const spy2 = mockServer.stubJSONResponse({ data: "world" }, 200, {
+  const spy2 = mockServer.stubJSONResponse(
     method: "get",
     path: "*/foo/baz",
+    response: { data: "world" },
+    status: 200,
   });
 
   const res1 = await fetch("/foo/bar").then((res) => res.json());
@@ -77,14 +81,13 @@ it("should stub the given server requests", async () => {
   // We can assert on the returned spies
   expect(spy1).toHaveBeenCalledWith(
     expect.objectContaining({ method: "GET" }),
-    expect.anything(),
-    expect.anything()
   );
   expect(spy2).toHaveBeenCalledWith(
     expect.objectContaining({ method: "GET" }),
-    expect.anything(),
-    expect.anything()
   );
+
+  // We can use the custom matchers
+  expect(spy1).toHaveBeenCalledWithUrl("/foo/bar", { exact: false });
 
   // The responses are the ones given by the test server
   expect(res1.data).toBe("hello");
@@ -110,9 +113,11 @@ it("should work fine with a react Element", () => {
     return <div>{serverResponse}</div>;
   }
 
-  mockServer.stubJSONResponse("This is the response from the server", 200, {
+  mockServer.stubJSONResponse({
     method: "get",
     path: "*/some/url",
+    response: "This is the response from the server",
+    status: 200,
   });
 
   render(<DummyComponent />);

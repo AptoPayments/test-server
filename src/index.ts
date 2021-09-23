@@ -1,70 +1,85 @@
-import jestMock from "jest-mock";
-import {
-  DefaultRequestBody,
-  MockedResponse,
-  RequestParams,
-  ResponseComposition,
-  rest,
-  RestContext,
-  RestRequest,
-} from "msw";
+import * as jestMock from "jest-mock";
+import { DefaultRequestBody, RequestParams, rest, RestRequest } from "msw";
 import { setupServer } from "msw/node";
-
-const DEFAULT_OPTIONS: stubJsonResponseOptions = { path: "*", method: "get" };
-
-export type stubbedMethodOptions = "get" | "post" | "put" | "delete";
-
-export interface stubJsonResponseOptions {
-  path?: string;
-  method?: stubbedMethodOptions;
-}
+import { extendMatchers } from "./matchers";
 
 /**
- * Since we can only have a variable it's created here
+ * Utility types to make the spy code more readable
  */
-const server = setupServer();
+export type ISpyReturnValue = undefined;
+export type ISpyParams = [RestRequest<DefaultRequestBody, RequestParams>];
+export type ISpy = jestMock.Mock<ISpyReturnValue, ISpyParams>;
+
+/**
+ * Since we can only have a variable it's created and exported here
+ */
+export const server = setupServer();
+
+/**
+ * When the code is imported we automatically extend jest with testServer matchers
+ */
+extendMatchers();
+
+interface IStubJSONResponseArgs<TBodyResponse> {
+  /**
+   * The object you want the server to reply
+   */
+  response?: TBodyResponse;
+  /**
+   * HTTP status of the server response
+   */
+  status?: number;
+  /**
+   * Path passed to msw to intercept (https://mswjs.io/docs/api/rest) defaults to "*"
+   */
+  path?: string;
+  /**
+   * HTTP method passed to msw to intercept (https://mswjs.io/docs/api/rest) defaults to "get"
+   */
+  method?: "get" | "post" | "put" | "delete" | "options";
+}
 
 /**
  * Helper function to stub a server json response using https://mswjs.io/.
- *
- * @param response - The object you want the server to reply
- * @param status? - Http status of the response
- * @param options? - An object with extra options, currently only a path is supported.
  */
 export function stubJSONResponse<TBodyResponse>(
-  response: TBodyResponse,
-  status = 200,
-  options: stubJsonResponseOptions = DEFAULT_OPTIONS
+  args?: IStubJSONResponseArgs<TBodyResponse>
 ) {
-  const path = options.path || "*";
-  const method = options.method || "get";
+  /**
+   * Setup default options
+   */
+  const path = args?.path || "*";
+  const method = args?.method || "get";
+  const status = args?.status || 200;
+  const response = args?.response || {};
 
-  const handler = jestMock
-    .fn<MockedResponse | Promise<MockedResponse>, any>()
-    .mockImplementation(
-      (
-        req: RestRequest<DefaultRequestBody, RequestParams>,
-        res: ResponseComposition<TBodyResponse>,
-        ctx: RestContext
-      ) => {
-        return res(ctx.json(response), ctx.status(status));
-      }
-    );
+  /**
+   * This spy is used to ensure the server was called with the right request.
+   */
+  const serverSpy: ISpy = jestMock.fn();
 
-  server.use(rest[method](path, handler));
+  /**
+   * Use msw.io to handle requests
+   */
+  server.use(
+    rest[method](path, (req, res, ctx) => {
+      serverSpy(req);
+      return res(ctx.json(response), ctx.status(status));
+    })
+  );
 
-  return handler;
+  /**
+   * Return the spy so we can use it in our tests
+   */
+  return serverSpy;
 }
 
 /**
- * We need to annotate the type of the default export [TS2742]
+ * All the exports go at the end of the file
  */
-type ITestServer = typeof server & {
-  rest: typeof rest;
-  stubJSONResponse: typeof stubJSONResponse;
+export { rest } from "msw";
+export default {
+  ...server,
+  rest,
+  stubJSONResponse,
 };
-
-/**
- *
- */
-export default { ...server, rest, stubJSONResponse } as ITestServer;
