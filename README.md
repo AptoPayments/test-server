@@ -129,3 +129,29 @@ it("should work fine with a react Element", () => {
   });
 });
 ```
+
+## Types
+
+This package extends jest with custom matchers that need to be declared in your type declarations file
+
+```ts
+declare namespace jest {
+  interface Matchers<R, T> {
+    /**
+     * @description
+     * Assert whether the test server has called with the given body
+     * @example
+     * expect(spy).toHaveBeenCalledWithBody({data: 'Hello World'});
+     */
+    toHaveBeenCalledWithBody(body: any): R;
+    /**
+     * @description
+     * Assert whether the test server has called with the given body
+     * @example
+     * expect(spy).toHaveBeenCalledWithUrl('https://example.com/api/users');
+     * expect(spy).toHaveBeenCalledWithUrl('/api/users', {exact: false});
+     */
+    toHaveBeenCalledWithUrl(url: string, options: { exact: boolean }): R;
+  }
+}
+```

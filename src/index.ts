@@ -1,7 +1,7 @@
 import * as jestMock from "jest-mock";
 import { DefaultRequestBody, RequestParams, rest, RestRequest } from "msw";
 import { setupServer } from "msw/node";
-import { extendMatchers } from "./matchers";
+import './matchers';
 
 /**
  * Utility types to make the spy code more readable
@@ -14,11 +14,6 @@ export type ISpy = jestMock.Mock<ISpyReturnValue, ISpyParams>;
  * Since we can only have a variable it's created and exported here
  */
 export const server = setupServer();
-
-/**
- * When the code is imported we automatically extend jest with testServer matchers
- */
-extendMatchers();
 
 interface IStubJSONResponseArgs<TBodyResponse> {
   /**
