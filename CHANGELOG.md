@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.9 (2021-09-23)
+
+
+### Features
+
+* Remove matchers ([2a06cca](https://github.com/AptoPayments/test-server/commit/2a06cca264921985c368b83b4b4acbc5f874553f))
+
 ### 0.0.8 (2021-09-23)
 
 ### 0.0.7 (2021-09-23)
