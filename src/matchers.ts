@@ -1,4 +1,11 @@
-import { ISpy, ISpyParams } from ".";
+import { ISpy } from ".";
+
+declare namespace jest {
+  interface Matchers {
+    toHaveBeenCalledWithBody(): any; // TODO: This should be of type "CustomMatcherResult"
+    toHaveBeenCalledWithUrl(): any; // TODO: This should be of type "CustomMatcherResult"
+  }
+}
 
 export function extendMatchers() {
   expect.extend({
@@ -6,7 +13,6 @@ export function extendMatchers() {
       expect(actual).toHaveBeenCalledWith(
         expect.objectContaining({ body: JSON.stringify(expectedBody) })
       );
-
       return { pass: true, message: () => "" };
     },
   });
@@ -14,7 +20,7 @@ export function extendMatchers() {
   expect.extend({
     toHaveBeenCalledWithUrl(
       actual: ISpy,
-      expectedUrl,
+      expectedUrl: string,
       { exact = true } = { exact: true }
     ) {
       const actualURLs: string[] = [];
