@@ -9,7 +9,7 @@ Testing utility to be used together with [jest](https://jestjs.io/), [testing li
 Install @apto-payments/test-server as a dev dependency.
 
 ```
-npm i -D @apto-payments/test-server
+npm i -D @apto-payments/test-server @apto-payments/test-server-matchers'
 ```
 
 You might need to install the peer-dependencies yourself.
@@ -31,6 +31,8 @@ Usually this file is named `setupTests.ts`, you just need to add 3 steps:
 ```ts
 // setupTests.ts
 import server from "@apto-payments/test-server";
+// Optionally include the extended matchers
+import '@apto-payments/test-server-matchers';
 
 /**
  * Start the test-server at the beginning
