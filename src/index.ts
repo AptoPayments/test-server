@@ -1,14 +1,12 @@
-import * as jestMock from "jest-mock";
 import { DefaultRequestBody, RequestParams, rest, RestRequest } from "msw";
 import { setupServer } from "msw/node";
-import './matchers';
 
 /**
  * Utility types to make the spy code more readable
  */
 export type ISpyReturnValue = undefined;
 export type ISpyParams = [RestRequest<DefaultRequestBody, RequestParams>];
-export type ISpy = jestMock.Mock<ISpyReturnValue, ISpyParams>;
+export type ISpy = jest.Mock<ISpyReturnValue, ISpyParams>;
 
 /**
  * Since we can only have a variable it's created and exported here
@@ -51,7 +49,7 @@ export function stubJSONResponse<TBodyResponse>(
   /**
    * This spy is used to ensure the server was called with the right request.
    */
-  const serverSpy: ISpy = jestMock.fn();
+  const serverSpy: ISpy = jest.fn();
 
   /**
    * Use msw.io to handle requests
