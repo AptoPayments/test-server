@@ -9,7 +9,7 @@ Testing utility to be used together with [jest](https://jestjs.io/), [testing li
 Install @apto-payments/test-server as a dev dependency.
 
 ```
-npm i -D @apto-payments/test-server @apto-payments/test-server-matchers'
+npm i -D @apto-payments/test-server @apto-payments/test-server-matchers
 ```
 
 You might need to install the peer-dependencies yourself.
@@ -31,7 +31,7 @@ Usually this file is named `setupTests.ts`, you just need to add 3 steps:
 ```ts
 // setupTests.ts
 import server from "@apto-payments/test-server";
-// Optionally include the extended matchers
+// (Recommended but optional) include the extended matchers
 import '@apto-payments/test-server-matchers';
 
 /**
@@ -88,7 +88,7 @@ it("should stub the given server requests", async () => {
     expect.objectContaining({ method: "GET" }),
   );
 
-  // We can use the custom matchers
+  // Optionally we can use the custom matchers 
   expect(spy1).toHaveBeenCalledWithUrl("/foo/bar", { exact: false });
 
   // The responses are the ones given by the test server
@@ -130,30 +130,4 @@ it("should work fine with a react Element", () => {
     ).toBeVisible();
   });
 });
-```
-
-## Types
-
-This package extends jest with custom matchers that need to be declared in your type declarations file
-
-```ts
-declare namespace jest {
-  interface Matchers<R, T> {
-    /**
-     * @description
-     * Assert whether the test server has called with the given body
-     * @example
-     * expect(spy).toHaveBeenCalledWithBody({data: 'Hello World'});
-     */
-    toHaveBeenCalledWithBody(body: any): R;
-    /**
-     * @description
-     * Assert whether the test server has called with the given body
-     * @example
-     * expect(spy).toHaveBeenCalledWithUrl('https://example.com/api/users');
-     * expect(spy).toHaveBeenCalledWithUrl('/api/users', {exact: false});
-     */
-    toHaveBeenCalledWithUrl(url: string, options: { exact: boolean }): R;
-  }
-}
-```
+``
