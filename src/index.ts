@@ -1,5 +1,8 @@
+import { graphql } from "msw";
 import { DefaultRequestBody, RequestParams, rest, RestRequest } from "msw";
 import { setupServer } from "msw/node";
+
+
 
 /**
  * Utility types to make the spy code more readable
@@ -67,12 +70,24 @@ export function stubJSONResponse<TBodyResponse>(
   return serverSpy;
 }
 
+export function stubGraphQlResponse() {
+  const foo = graphql.link("https://api.graph.cool/simple/v1/movies");
+  const operationName = "GetAllUsers";
+  const data = {};
+
+  foo.query(operationName, (req, res, ctx) => {
+    return res(ctx.data({}));
+  });
+}
+
 /**
  * All the exports go at the end of the file
  */
 export { rest } from "msw";
+
 export default {
   ...server,
   rest,
   stubJSONResponse,
+  stubGraphQlResponse,
 };
