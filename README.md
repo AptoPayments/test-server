@@ -1,6 +1,6 @@
 # @apto-payments/test-server
 
-Testing utility to be used together with [jest](https://jestjs.io/), [testing library](https://testing-library.com/) and [msw](https://mswjs.io/).
+Testing utility to be used together with [jest](https://jestjs.io/) and [msw](https://mswjs.io/).
 
 ## Getting started
 
