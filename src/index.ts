@@ -1,11 +1,14 @@
 import { DefaultBodyType, PathParams, rest, RestRequest } from "msw";
-import { setupServer } from "msw/node";
+import { ServerLifecycleEventsMap, setupServer } from "msw/node";
 
 /**
  * Utility types to make the spy code more readable
  */
 export type ISpyReturnValue = undefined;
-export type ISpyParams = [RestRequest<never,  PathParams<string>> | RestRequest<DefaultBodyType, PathParams<string>>];
+export type ISpyParams = [
+  | RestRequest<never, PathParams<string>>
+  | RestRequest<DefaultBodyType, PathParams<string>>
+];
 export type ISpy = jest.Mock<ISpyReturnValue, ISpyParams>;
 
 /**
@@ -71,8 +74,18 @@ export function stubJSONResponse<TBodyResponse>(
  * All the exports go at the end of the file
  */
 export { rest } from "msw";
+
+// TODO: Research why we need to manually re-export all of this :/ 
 export default {
   ...server,
+  events: server.events,
   rest,
+  close: server.close,
+  listen: server.listen,
+  listHandlers: server.listHandlers,
+  printHandlers: server.printHandlers,
+  resetHandlers: server.resetHandlers,
+  restoreHandlers: server.restoreHandlers,
   stubJSONResponse,
+  use: server.use,
 };

@@ -1,5 +1,10 @@
 const server = require("./lib/index.js").default;
-require('@apto-payments/test-server-matchers')
+
+console.warn({ server: server });
+
+
+
+require("@apto-payments/test-server-matchers");
 /**
  * Start the test-server at the beginning
  */

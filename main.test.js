@@ -1,4 +1,6 @@
-const testServer = require("./lib/index.js");
+const testServer = require("./lib/index.js").default;
+
+
 require("whatwg-fetch");
 
 describe("testServer", () => {
