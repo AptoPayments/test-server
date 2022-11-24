@@ -1,11 +1,11 @@
-import { DefaultRequestBody, RequestParams, rest, RestRequest } from "msw";
+import { DefaultBodyType, PathParams, rest, RestRequest } from "msw";
 import { setupServer } from "msw/node";
 
 /**
  * Utility types to make the spy code more readable
  */
 export type ISpyReturnValue = undefined;
-export type ISpyParams = [RestRequest<DefaultRequestBody, RequestParams>];
+export type ISpyParams = [RestRequest<never,  PathParams<string>> | RestRequest<DefaultBodyType, PathParams<string>>];
 export type ISpy = jest.Mock<ISpyReturnValue, ISpyParams>;
 
 /**
